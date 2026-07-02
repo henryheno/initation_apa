@@ -1,0 +1,410 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Invitation Bêta-Test - APA</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+  
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            min-height: 100%;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #050608;
+            color: #f4f4f6;
+            overflow-y: auto; 
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 0;
+        }
+
+
+        .watermark {
+            position: fixed;
+            inset: 0;
+            background-image: url('logo.jpeg'); 
+            background-size: cover; 
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.35; 
+            filter: blur(3px); 
+            pointer-events: none;
+            z-index: 0;
+        }
+
+   
+        nav {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 25px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(10px); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            white-space: nowrap;
+        }
+
+        nav img {
+            height: 35px;
+            width: auto;
+            border-radius: 50%;
+        }
+
+        nav strong {
+            letter-spacing: 0.1em;
+            font-size: 1rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .text-red { color: #ff5555; }
+        .text-blue { color: #5588ff; }
+        .text-yellow { color: #ffcc00; }
+
+     
+        .card {
+            position: relative;
+            z-index: 5; 
+            margin-top: 50px; 
+            background: rgba(20, 25, 30, 0.15); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 204, 0, 0.5);
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.2);
+            width: min(1000px, calc(100vw - 40px));
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+        }
+
+   
+        .hero-panel {
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 35px;
+        }
+
+  
+        .badge-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            align-self: flex-start;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 999px;
+            background: rgba(255, 204, 0, 0.15);
+            border: 1px solid rgba(255, 204, 0, 0.4);
+            color: #ffcc00;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: bold;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+
+        #inline-animation-container {
+            position: relative;
+            height: 30px;
+            width: 80px; /* Espace réservé pour ne pas décaler le reste */
+            display: flex;
+            align-items: center;
+        }
+
+        .floating-word {
+            position: absolute;
+            font-size: 1.4rem; /* Taille réduite pour aller avec le badge */
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0;
+            animation: floatFadeInline 10s linear forwards;
+        }
+
+        .floating-word span {
+            text-shadow: 0 0 10px currentColor, 0 0 20px rgba(0,0,0,0.8); 
+        }
+
+        @keyframes floatFadeInline {
+            0% { opacity: 0; transform: translateY(10px) scale(0.9); filter: blur(3px); }
+            3% { opacity: 1; transform: translateY(0px) scale(1); filter: blur(0px); }
+            97% { opacity: 1; transform: translateY(0px) scale(1); filter: blur(0px); }
+            100% { opacity: 0; transform: translateY(-10px) scale(1.05); filter: blur(3px); }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: #ffffff;
+            font-weight: 300;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8); 
+        }
+
+        .hero-title strong {
+            display: block;
+            color: #ffcc00;
+            font-weight: 700;
+        }
+
+        .hero-text {
+            color: #ffffff; 
+            font-size: 1.05rem;
+            line-height: 1.6;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.2); 
+            backdrop-filter: blur(8px); 
+            padding: 20px;
+            border-left: 3px solid #ffcc00; 
+            border-radius: 0 15px 15px 0;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9); 
+        }
+
+        .hero-text strong {
+            color: #ffcc00; 
+        }
+
+        .hero-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .hero-actions a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 54px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .btn-wa {
+            background: rgba(37, 211, 102, 0.15);
+            color: #25d366;
+            border: 1px solid rgba(37, 211, 102, 0.4);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-wa:hover {
+            background: rgba(37, 211, 102, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .btn-group {
+            background: linear-gradient(135deg, #ffcc00, #ff9900);
+            color: #000000;
+            border: none;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.2);
+        }
+
+        .btn-group:hover {
+            box-shadow: 0 10px 25px rgba(255, 204, 0, 0.4);
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+
+        .qr-panel {
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 25px;
+            background: rgba(0, 0, 0, 0.15); 
+            border-left: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .qr-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .qr-card:hover {
+            transform: scale(1.02);
+            border-color: rgba(255, 204, 0, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .qr-card strong {
+            color: #ffffff;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .qr-container {
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 16px;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+        }
+
+        @media (max-width: 900px) {
+            .card { grid-template-columns: 1fr; }
+            .hero-panel { padding: 40px 30px; }
+            .qr-panel { padding: 30px; flex-direction: row; border-left: none; border-top: 1px solid rgba(255,255,255,0.05); }
+        }
+
+        @media (max-width: 600px) {
+            nav { top: 20px; width: 95%; justify-content: center; padding: 10px 15px; }
+            nav strong { font-size: 0.75rem; }
+            .hero-title { font-size: 2.2rem; }
+            .hero-actions { grid-template-columns: 1fr; }
+            .qr-panel { flex-direction: column; }
+            .badge-container { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="watermark"></div>
+
+    <nav>
+        <img src="logo.jpeg" alt="Logo" onerror="this.style.display='none'">
+        <strong>
+            <span class="text-red">Armée</span> 
+            <span class="text-blue">des petits</span> 
+            <span class="text-yellow">ANges</span>
+        </strong>
+    </nav>
+
+    <div class="card">
+        <div class="hero-panel">
+            
+            <div class="badge-container">
+                <span class="hero-badge">Phase de Test Bêta</span>
+                <div id="inline-animation-container"></div>
+            </div>
+
+            <h1 class="hero-title">Ave<br><strong>Les Archanges</strong></h1>
+            
+            <div class="hero-text">
+                <p>Je suis <strong>Ya Sara Henry</strong>.</p><br>
+                <p>Je développe actuellement une <strong>solution numérique</strong> pour notre armée, et je vous invite à y participer en exclusivité pour la tester avant son lancement officiel.</p><br>
+                <p>Dans l'attente de vos retours, je vous souhaite une excellente journée.</p>
+            </div>
+
+            <div class="hero-actions">
+                <a class="btn-wa" href="https://wa.me/243859009681?text=Ave%20Ya%20Sara%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20pour%20tester%20la%20solution" target="_blank">Me Contacter</a>
+                <a class="btn-group" href="https://chat.whatsapp.com/GamuvjAagmbItTtokSpmhg" target="_blank">Rejoindre le Groupe Test</a>
+            </div>
+        </div>
+
+        <aside class="qr-panel">
+            <div class="qr-card">
+                <strong>Contact WhatsApp</strong>
+                <div class="qr-container" id="qr-contact"></div>
+            </div>
+            <div class="qr-card">
+                <strong>Groupe de Test</strong>
+                <div class="qr-container" id="qr-group"></div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+  
+        window.addEventListener('DOMContentLoaded', () => {
+            new QRCode(document.getElementById('qr-contact'), {
+                text: 'https://wa.me/243859009681?text=Ave%20Ya%20Sara',
+                width: 120, height: 120,
+                colorDark: '#000000', colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            new QRCode(document.getElementById('qr-group'), {
+                text: 'https://chat.whatsapp.com/GamuvjAagmbItTtokSpmhg',
+                width: 120, height: 120,
+                colorDark: '#000000', colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        });
+
+   
+        const flashSequence = [
+            '<span style="color:#ff2b2b">A</span><span style="color:#5588ff">V</span><span style="color:#ffcc00">E</span>',
+            '<span style="color:#ff2b2b">A</span><span style="color:#5588ff">P</span><span style="color:#ffcc00">A</span>',
+            '<span style="color:#ff2b2b">S</span><span style="color:#5588ff">L</span><span style="color:#ffcc00">O</span><span style="color:#ffffff">S</span>'
+        ];
+        
+        const animationContainer = document.getElementById('inline-animation-container');
+        let currentSequenceIndex = 0;
+
+        function showNextWord() {
+         
+            animationContainer.innerHTML = '';
+            
+            const div = document.createElement('div');
+            div.className = 'floating-word';
+            
+            div.innerHTML = flashSequence[currentSequenceIndex];
+
+            animationContainer.appendChild(div);
+
+           
+            currentSequenceIndex = (currentSequenceIndex + 1) % flashSequence.length;
+        }
+
+       
+        showNextWord();
+        
+        
+        setInterval(showNextWord, 10000);
+    </script>
+</body>
+</html>
